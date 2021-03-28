@@ -9,8 +9,8 @@ from typing import List
 
 class PreProcessingPipeline:
 
-    def __init__(self):
-        self.conn = self.connect_to_database()
+    def __init__(self, conn):
+        self.conn = conn
         self.db_cursor = self.conn.mydb.cursor()
 
     def tokenize_data(self, input_string):
@@ -89,19 +89,9 @@ class PreProcessingPipeline:
             self.conn.insert_row_pre_process_table(token_store)
             self.conn.mydb.commit()
 
-    def connect_to_database(self):
-        connector = DatabaseConnector(
-            host="localhost",
-            user="chaitanya",
-            passwd="root",
-            database_name="sentiment_store"
-        )
+# if __name__ == '__main__':
 
-        return connector
-
-
-if __name__ == '__main__':
-    pre_processObj = PreProcessingPipeline()
-    data_dump = 'data_dump'
-    pre_processObj.read_data(data_dump)
-    print("Preprocessing done")
+# pre_processObj = PreProcessingPipeline()
+# data_dump = 'data_dump'
+# pre_processObj.read_data(data_dump)
+# print("Preprocessing done")
