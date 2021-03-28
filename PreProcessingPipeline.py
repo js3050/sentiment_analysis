@@ -3,8 +3,6 @@ import re
 from DatabaseConnection import DatabaseConnector
 from nltk.tokenize import TweetTokenizer
 import json
-from bs4 import BeautifulSoup
-import demoji
 
 from typing import List
 
