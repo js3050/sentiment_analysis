@@ -27,13 +27,20 @@ class DataGobbler:
         self._write_batch(negative_files, negative_path, "negative")
 
     def read_data_from_file_rt(self):
-        data = pd.read_csv("datasetSentences.txt", sep="\t")
-        data = list(data['sentence'])
-        dataset = []
-        for each in data:
-            dataset.append((each, ""))
-        print("writing rotten tomatoes data")
-        self.write_data(dataset)
+        data = pd.read_csv("rotten_tomatoes_reviews.csv")
+
+        # change to positive and negative based on fresh score
+        data.loc[data['Freshness'] == 0, 'Freshness'] = "negative"
+        data.loc[data['Freshness'] == 1, 'Freshness'] = "positive"
+        data = data.iloc[:100000, :]
+        data_list = []
+        for index in range(len(data)):
+            data_list.append(
+                (data.iloc[index, :]['Review'],data.iloc[index, :]['Freshness'])
+            )
+
+        print("writing rotten tomatoes data", len(data_list))
+        self.write_data(data_list)
 
     def _write_batch(self, file_listing, path, label):
         data = []
@@ -55,7 +62,13 @@ class DataGobbler:
             print("Batch written", batch_number)
 
     def write_data(self, data_list):
-        sql_query = "INSERT INTO data_dump (review, sentiment) VALUES(%s, %s);"
 
+        sql_query = "INSERT INTO data_dump (review, sentiment) VALUES(%s, %s);"
         self.db_cursor.executemany(sql_query, data_list)
         self.db.commit()
+
+        print("complete")
+
+
+
+
