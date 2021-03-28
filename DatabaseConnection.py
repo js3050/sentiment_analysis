@@ -32,10 +32,10 @@ class DatabaseConnector:
 
     def create_pre_process_table(self):
         self.cursor.execute("DROP TABLE IF EXISTS preprocesstable;")
-        self.cursor.execute("CREATE TABLE preprocesstable (review JSON);")
+        self.cursor.execute("CREATE TABLE preprocesstable (review JSON, sentiment VARCHAR(255));")
 
     def insert_row_pre_process_table(self,json_text):
-        sql_query = '''INSERT INTO preprocesstable (review) VALUES(%s);'''
+        sql_query = '''INSERT INTO preprocesstable (review,sentiment) VALUES(%s, %s);'''
         self.cursor.executemany(sql_query, json_text)
 
 
