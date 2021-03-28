@@ -18,6 +18,8 @@ class DataGobbler:
         # rotten tomatoes
         self.read_data_from_file_rt()
 
+        self.commit_to_db()
+
     def read_data_from_file_imdb(self):
         positive_path = "aclImdb/train/pos/"
         negative_path = "aclImdb/train/neg/"
@@ -28,11 +30,12 @@ class DataGobbler:
 
     def read_data_from_file_rt(self):
         data = pd.read_csv("rotten_tomatoes_reviews.csv")
-
+        #selecting only the first 100,000 rows
+        data = data.iloc[:100000, :]
         # change to positive and negative based on fresh score
         data.loc[data['Freshness'] == 0, 'Freshness'] = "negative"
         data.loc[data['Freshness'] == 1, 'Freshness'] = "positive"
-        data = data.iloc[:100000, :]
+
         data_list = []
         for index in range(len(data)):
             data_list.append(
@@ -65,9 +68,11 @@ class DataGobbler:
 
         sql_query = "INSERT INTO data_dump (review, sentiment) VALUES(%s, %s);"
         self.db_cursor.executemany(sql_query, data_list)
-        self.db.commit()
 
         print("complete")
+
+    def commit_to_db(self):
+        self.db.commit()
 
 
 
