@@ -25,12 +25,8 @@ class DatabaseConnector:
         self.cursor = self.mydb.cursor()
 
     def init_tables(self):
-<<<<<<< HEAD
-        print("here")
-=======
-        print(self.mydb, " \n initializing tables ... ")
 
->>>>>>> 67d88f46ee6f3a42e3d4f1d2834566f9996dae03
+        print(self.mydb, " \n initializing tables ... ")
         self.cursor.execute("DROP TABLE IF EXISTS data_dump")
         self.cursor.execute("CREATE TABLE data_dump (review TEXT, sentiment VARCHAR(255))")
 
