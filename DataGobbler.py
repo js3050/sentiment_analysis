@@ -44,7 +44,7 @@ class DataGobbler:
             print("Batch written", batch_number)
 
     def write_data(self, data_list):
-        sql_query = "INSERT INTO DATA_DUMP (review, sentiment) VALUES(%s, %s);"
+        sql_query = "INSERT INTO data_dump (review, sentiment) VALUES(%s, %s);"
 
         self.db_cursor.executemany(sql_query, data_list)
         self.db.commit()

@@ -13,7 +13,7 @@ class DatabaseConnector:
         self.database_name = database_name
         self.connect()
         print(self.mydb, " \n initializing tables ... ")
-        self.init_tables()
+        #self.init_tables()
         print("Complete")
 
 
@@ -29,6 +29,7 @@ class DatabaseConnector:
 
 
     def init_tables(self):
+
         self.cursor.execute("DROP TABLE IF EXISTS data_dump")
         self.cursor.execute("CREATE TABLE data_dump (review TEXT, sentiment VARCHAR(255))")
 
