@@ -1,6 +1,6 @@
 import sys
 import os
-
+import pandas as pd
 
 class DataGobbler:
     db_cursor = None
@@ -15,6 +15,8 @@ class DataGobbler:
     def start(self):
         # imdb
         self.read_data_from_file_imdb()
+        # rotten tomatoes
+        self.read_data_from_file_rt()
 
     def read_data_from_file_imdb(self):
         positive_path = "aclImdb/train/pos/"
@@ -23,6 +25,15 @@ class DataGobbler:
         negative_files = os.listdir(negative_path)
         self._write_batch(positive_files, positive_path, "positive")
         self._write_batch(negative_files, negative_path, "negative")
+
+    def read_data_from_file_rt(self):
+        data = pd.read_csv("datasetSentences.txt", sep="\t")
+        data = list(data['sentence'])
+        dataset = []
+        for each in data:
+            dataset.append((each, ""))
+        print("writing rotten tomatoes data")
+        self.write_data(dataset)
 
     def _write_batch(self, file_listing, path, label):
         data = []
