@@ -18,6 +18,7 @@ class DatabaseConnector:
 
 
 
+
     def connect(self):
         self.mydb = mysql.connector.connect(
             host=self.host,
@@ -29,6 +30,7 @@ class DatabaseConnector:
 
 
     def init_tables(self):
+        print(self.mydb, " \n initializing tables ... ")
 
         self.cursor.execute("DROP TABLE IF EXISTS data_dump")
         self.cursor.execute("CREATE TABLE data_dump (review TEXT, sentiment VARCHAR(255))")

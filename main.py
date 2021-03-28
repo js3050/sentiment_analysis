@@ -9,6 +9,7 @@ if __name__ == "__main__":
         passwd="root",
         database_name="sentiment_store"
     )
+    connector.init_tables()
     data_gobbler = DataGobbler(connector.mydb,connector.mydb.cursor())
     data_gobbler.start()
 
