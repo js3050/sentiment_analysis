@@ -13,11 +13,7 @@ class DatabaseConnector:
         self.database_name = database_name
         self.connect()
         print(self.mydb, " \n initializing tables ... ")
-        #self.init_tables()
         print("Complete")
-
-
-
 
     def connect(self):
         self.mydb = mysql.connector.connect(
@@ -28,7 +24,6 @@ class DatabaseConnector:
         )
         self.cursor = self.mydb.cursor()
 
-
     def init_tables(self):
 <<<<<<< HEAD
         print("here")
@@ -38,4 +33,13 @@ class DatabaseConnector:
 >>>>>>> 67d88f46ee6f3a42e3d4f1d2834566f9996dae03
         self.cursor.execute("DROP TABLE IF EXISTS data_dump")
         self.cursor.execute("CREATE TABLE data_dump (review TEXT, sentiment VARCHAR(255))")
+
+    def create_pre_process_table(self):
+        self.cursor.execute("DROP TABLE IF EXISTS preprocesstable;")
+        self.cursor.execute("CREATE TABLE preprocesstable (review JSON);")
+
+    def insert_row_pre_process_table(self,json_text):
+        sql_query = '''INSERT INTO preprocesstable (review) VALUES(%s);'''
+        self.cursor.executemany(sql_query, json_text)
+
 
