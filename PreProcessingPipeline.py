@@ -6,10 +6,6 @@ import json
 from bs4 import BeautifulSoup
 import demoji
 
-# string = "#throwbackthursday: Coolest fan we’ve ever seen. pic.twitter.com/Ll82Zi7Xug"
-
-
-# TODO: code for stemming string?
 from typing import List
 
 
@@ -65,9 +61,14 @@ class PreProcessingPipeline:
         return [text[i].lower() for i in range(len(text))]
 
     def preprocess_data(self):
+        print("Fetching data")
         text_data = self.db_cursor.fetchall()
+        print("done")
         token_store = []
-        print("Heyy")
+
+        print("Preprocessing..")
+        self.conn.create_pre_process_table()
+
         for i in range(len(text_data)):
             raw_string = text_data[i]
             tokenized_list = self.tokenize_data(raw_string[0])
@@ -82,9 +83,13 @@ class PreProcessingPipeline:
             json_tokenized_string = json.dumps(tokenized_list)
             token_store.append([json_tokenized_string, raw_string[1]])
 
-        self.conn.create_pre_process_table()
-        self.conn.insert_row_pre_process_table(token_store)
-        self.conn.mydb.commit()
+            if len(token_store) == 10000:
+                self.conn.insert_row_pre_process_table(token_store)
+                self.conn.mydb.commit()
+                token_store = []
+        if token_store:
+            self.conn.insert_row_pre_process_table(token_store)
+            self.conn.mydb.commit()
 
     def connect_to_database(self):
         connector = DatabaseConnector(
