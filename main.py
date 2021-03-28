@@ -5,8 +5,8 @@ if __name__ == "__main__":
 
     connector = DatabaseConnector(
         host="localhost",
-        user="root",
-        passwd="",
+        user="chaitanya",
+        passwd="root",
         database_name="sentiment_store"
     )
     data_gobbler = DataGobbler(connector.mydb,connector.mydb.cursor())
