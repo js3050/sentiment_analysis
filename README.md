@@ -39,7 +39,7 @@ Data understanding and prep:
    Stemming:
    
         Stemming not done because it may destroy some of our features
-        For example : Complicate (negative) nad compliment(positive) are stemmed to => comply
+        For example : Complicate (negative) and compliment(positive) are stemmed to => comply
         
 
    Handling emojis:
