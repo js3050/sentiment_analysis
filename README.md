@@ -1,4 +1,16 @@
 # sentiment_analysis
+Installation and Usage:
+
+    1) Install mysql
+    2) Open mysql shell
+    3) Create database with name =  "sentiment_store"
+    4) Please enter your username and password on line 8 and 9
+    5) Run main.py
+        -> This combines the 2 data sources and stores it in a table called data_dump
+        -> Then it reads data from data_dump.
+        -> Cleans the entire dataset and preps it for running on a ML model
+        
+
 What does the business need?
  -> The movie producers need to understand if their movie is popular or not.
 
@@ -40,13 +52,4 @@ Data understanding and prep:
         NLTK stop words would remove important features
         ex : mustn't, shouldn't, etc
 
-Installation and Usage:
 
-    1) Install mysql
-    2) Open mysql shell
-    3) Create database with name =  "sentiment_store"
-    4) Please enter your username and password on line 8 and 9
-    5) Run main.py
-        -> This combines the 2 data sources and stores it in a table called data_dump
-        -> Then it reads data from data_dump.
-        -> Cleans the entire dataset and preps it for running on a ML model
