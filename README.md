@@ -19,19 +19,20 @@ Data understanding and prep:
         4) Remove remove punctuations
 
 
-    Tokenizer:
-        TweetTokenizer chosen because it performs better than the others by taking into account emojis, etc.
+   Tokenizer:
+       TweetTokenizer chosen because it performs better than the others by taking into account emojis, etc.
 
-    Stemming:
+   Stemming:
         Stemming not done because it may destroy some of our features
-        For example :
+        For example : Complicate (negative) nad compliment(positive) are stemmed to => comply
+        
 
-    Handling emojis:
+   Handling emojis:
         Emojis are very important and we replace each emoji with the text it represents
         example:
             :) is replaced with "happy"
 
-    NLTK Stop words used:
+   NLTK Stop words used:
         NLTK stop words would remove important features
         ex : mustn't, shouldn't, etc
 
