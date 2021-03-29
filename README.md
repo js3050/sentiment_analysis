@@ -24,11 +24,12 @@ Data understanding and prep:
     Example : tags like "</br>", spaces, punctuation marks and so on.
 
     Cleaning of the data has been done in 4 stages:
-        1) Handle emojis
+        1)Tokenize (using TweetTokenizer)
+        2) Handle emojis
             -> These are very important for sentiment analysis and need to be preserved.
-        2) Convert all text to lowercase
-        3) Remove html tags
-        4) Remove remove punctuations
+        3) Convert all text to lowercase
+        4) Remove html tags
+        5) Remove remove punctuations
 
 
    Tokenizer:
