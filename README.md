@@ -19,7 +19,7 @@ Data understanding and prep:
     We looked at the combined dataset and figured out that it was well balanced which is good.
      -> TODO: Attach Image
 
-    Further, we can see that there are many words that can through our model of track and these
+    Further, we can see that there are many words that can throw our model off track and these
     need to be cleaned.
     Example : tags like "</br>", spaces, punctuation marks and so on.
 
