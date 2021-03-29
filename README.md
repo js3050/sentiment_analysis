@@ -20,23 +20,28 @@ Data understanding and prep:
 
 
    Tokenizer:
+   
        TweetTokenizer chosen because it performs better than the others by taking into account emojis, etc.
 
    Stemming:
+   
         Stemming not done because it may destroy some of our features
         For example : Complicate (negative) nad compliment(positive) are stemmed to => comply
         
 
    Handling emojis:
+   
         Emojis are very important and we replace each emoji with the text it represents
         example:
             :) is replaced with "happy"
 
    NLTK Stop words used:
+   
         NLTK stop words would remove important features
         ex : mustn't, shouldn't, etc
 
 Installation and Usage:
+
     1) Install mysql
     2) Open mysql shell
     3) Create database with name =  "sentiment_store"
