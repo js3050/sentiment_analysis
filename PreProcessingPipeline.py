@@ -3,8 +3,9 @@ import re
 from DatabaseConnection import DatabaseConnector
 from nltk.tokenize import TweetTokenizer
 import json
-
+import string
 from typing import List
+import spacy
 
 
 class PreProcessingPipeline:
@@ -12,6 +13,7 @@ class PreProcessingPipeline:
     def __init__(self, conn):
         self.conn = conn
         self.db_cursor = self.conn.mydb.cursor()
+        self.nlp = spacy.load('en_core_web_sm')
 
     def tokenize_data(self, input_string):
         """
@@ -36,10 +38,11 @@ class PreProcessingPipeline:
     def remove_punctuations(self, text: List[str]):
 
         tokenized_string = ' '.join([str(text[i]) for i in range(len(text))])
-
+        #
         x = re.sub(r"[^a-zA-Z]", ' ', tokenized_string)
         x = re.sub(r'\s', ' ', x)
         x = re.sub(r' +', ' ', x)
+        # x = tokenized_string.translate(str.maketrans('', '', string.punctuation)).strip()
         return x.split()
 
     def handle_emojis(self, text_list: List[str]):
@@ -66,7 +69,7 @@ class PreProcessingPipeline:
 
         print("Preprocessing..")
         self.conn.create_pre_process_table()
-
+        x = 0
         for i in range(len(text_data)):
             raw_string = text_data[i]
             tokenized_list = self.tokenize_data(raw_string[0])
@@ -82,6 +85,8 @@ class PreProcessingPipeline:
             token_store.append([json_tokenized_string, raw_string[1]])
 
             if len(token_store) == 10000:
+                x += 1
+                print("Commit id ", x)
                 self.conn.insert_row_pre_process_table(token_store)
                 self.conn.mydb.commit()
                 token_store = []

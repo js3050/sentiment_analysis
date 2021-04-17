@@ -5,8 +5,8 @@ from PreProcessingPipeline import PreProcessingPipeline
 if __name__ == "__main__":
     connector = DatabaseConnector(
         host="localhost",
-        user="chaitanya",
-        passwd="root",
+        user="root",
+        passwd="",
         database_name="sentiment_store"
     )
     connector.init_tables()
