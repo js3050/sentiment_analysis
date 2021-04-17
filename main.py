@@ -2,7 +2,8 @@ from DatabaseConnection import DatabaseConnector
 from DataGobbler import DataGobbler
 from PreProcessingPipeline import PreProcessingPipeline
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     connector = DatabaseConnector(
         host="localhost",
         user="chaitanya",

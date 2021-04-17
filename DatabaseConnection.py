@@ -1,6 +1,7 @@
 import mysql.connector
 
 
+
 class DatabaseConnector:
     mydb, database_name, cursor = None, None, None
     host, user, passwd = None, None, None
