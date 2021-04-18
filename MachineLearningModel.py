@@ -2,16 +2,17 @@ from sklearn import metrics
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 import matplotlib.pyplot as plt
 
 
 class MachineLearningModel:
     __slots__ = "modelList", "trainingData", 'testingData', 'testLabels', 'train_labels', 'results'
 
-    def __init__(self, X, y_train, Y, y_test):
-        self.modelList = [SVC('rbf', 0.02), RandomForestClassifier(n_estimators=50)]
-        self.trainingData = X
-        self.testingData = Y
+    def __init__(self, X_train, y_train, X_test, y_test):
+        self.modelList = [RandomForestClassifier(n_estimators=50), MLPClassifier() ]
+        self.trainingData = X_train
+        self.testingData = X_test
         self.testLabels = y_test
         self.train_labels = y_train
         self.results = {}
