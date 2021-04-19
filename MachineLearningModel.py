@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from wordcloud import WordCloud, STOPWORDS
-
+from DataInsight import DataInsights
 import pandas as pd
 # from gensim.models import Word2Vec
 import numpy as np
@@ -34,13 +34,26 @@ class MachineLearningModel:
             print('Done with', type(self.modelList[i]).__name__)
         print("Classification Results = ",self.results)
 
-    def Kmeans(self):
-        model = KMeans(n_clusters=2,max_iter=200)
+    def Kmeans(self,original_test_data):
+        model = KMeans(n_clusters=2,max_iter=400)
         km = model.fit(self.trainingData)
 
         res = km.predict(self.testingData)
 
-        print(res)
+        pred_one = []
+        pred_zero = []
+        for i in range(len(original_test_data)):
+            if res[i] == 1:
+                pred_one.append(original_test_data.iloc[i])
+            else:
+                pred_zero.append(original_test_data.iloc[i])
+
+
+        datas_obj = DataInsights()
+        datas_obj._gen_cloud(pred_one)
+        datas_obj._gen_cloud(pred_zero)
+
+        print(metrics.accuracy_score(res, self.testLabels))
 
     def visualize_results(self):
         keys = self.results.keys()
@@ -49,23 +62,3 @@ class MachineLearningModel:
         plt.savefig("Classification.png")
         plt.show()
 
-    def centroidsDict(self,centroids, index):
-        a = centroids.T[index].sort_values(ascending=False).reset_index().values
-        centroid_dict = dict()
-
-        for i in range(0, len(a)):
-            centroid_dict.update({a[i, 0]: a[i, 1]})
-
-        return centroid_dict
-
-    def generateWordClouds(self,centroids):
-        wordcloud = WordCloud(max_font_size=100, background_color='white')
-        for i in range(0, len(centroids)):
-            centroid_dict = self.centroidsDict(centroids, i)
-            wordcloud.generate_from_frequencies(centroid_dict)
-
-            plt.figure()
-            plt.title('Cluster {}'.format(i))
-            plt.imshow(wordcloud)
-            plt.axis("off")
-            plt.show()

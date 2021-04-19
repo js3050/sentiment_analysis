@@ -10,21 +10,22 @@ from MachineLearningModel import MachineLearningModel
 
 
 class SentimentAnalyzer:
-    __slots__ = "database", "cursor", "dataset", "X_train", "X_test", "y_train", "y_test", "model"
+    __slots__ = "database", "cursor", "dataset", "X_train", "X_test", "y_train", "y_test", "model",'og_test_data'
 
     def __init__(self, database):
         self.database = database
         self.cursor = database.cursor()
+        self.og_test_data = None
         self.get_data()
         self.split_data()
         # self.generate_tfidf_mapping()
         self.model = MachineLearningModel(self.X_train, self.y_train, self.X_test, self.y_test)
         #self.model.execute_classifiers()
         #self.model.visualize_results()
-        self.model.Kmeans()
+        self.model.Kmeans(self.og_test_data)
 
     def get_data(self):
-        sql_query = "(SELECT * from sentiment_store.preprocesstable where sentiment='positive' limit 200) UNION ALL (SELECT * from sentiment_store.preprocesstable where sentiment='negative' limit 200);"
+        sql_query = "(SELECT * from sentiment_store.preprocesstable where sentiment='positive' limit 2000) UNION ALL (SELECT * from sentiment_store.preprocesstable where sentiment='negative' limit 2000);"
         self.cursor.execute(sql_query)
         self.dataset = self.cursor.fetchall()
 
@@ -44,6 +45,7 @@ class SentimentAnalyzer:
         y = y.replace({
             "positive": 1, "negative": 0
         })
+        self.og_test_data = train_test_split(x, y, test_size=0.3)[1]
         x = self.generate_tfidf_mapping(x)
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(x, y, test_size=0.3)
 
