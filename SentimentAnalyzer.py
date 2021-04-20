@@ -22,10 +22,10 @@ class SentimentAnalyzer:
         self.model = MachineLearningModel(self.X_train, self.y_train, self.X_test, self.y_test)
         #self.model.execute_classifiers()
         #self.model.visualize_results()
-        self.model.Kmeans(self.og_test_data)
-
+        #self.model.Kmeans(self.og_test_data)
+        self.model.DBSCAN()
     def get_data(self):
-        sql_query = "(SELECT * from sentiment_store.preprocesstable where sentiment='positive' limit 2000) UNION ALL (SELECT * from sentiment_store.preprocesstable where sentiment='negative' limit 2000);"
+        sql_query = "(SELECT * from sentiment_store.preprocesstable where sentiment='positive' limit 10000) UNION ALL (SELECT * from sentiment_store.preprocesstable where sentiment='negative' limit 10000);"
         self.cursor.execute(sql_query)
         self.dataset = self.cursor.fetchall()
 
