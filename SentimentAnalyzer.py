@@ -2,8 +2,6 @@ import pandas as pd
 import json
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-
-
 from MachineLearningModel import MachineLearningModel
 
 
@@ -14,17 +12,17 @@ class SentimentAnalyzer:
     __slots__ = "database", "cursor", "dataset", "X_train", "X_test", "y_train", "y_test", "model",'og_test_data'
 
     def __init__(self, database):
+        print("Running sentiment analysis and clustering")
         self.database = database
         self.cursor = database.cursor()
         self.og_test_data = None
         self.get_data()
         self.split_data()
-        # self.generate_tfidf_mapping()
         self.model = MachineLearningModel(self.X_train, self.y_train, self.X_test, self.y_test)
 
-        #self.model.execute_classifiers()
-        #self.model.visualize_results()
-        #self.model.Kmeans(self.og_test_data)
+        self.model.execute_classifiers()
+        self.model.visualize_results()
+        self.model.Kmeans(self.og_test_data)
         self.model.DBSCAN()
 
 

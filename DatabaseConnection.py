@@ -1,7 +1,6 @@
 import mysql.connector
 
 
-
 class DatabaseConnector:
     """
     Model class used to instantiate and set up the database connection

@@ -1,13 +1,10 @@
 import re
-
-from DatabaseConnection import DatabaseConnector
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import wordnet
 from nltk import pos_tag
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 import json
-import string
 from typing import List
 import spacy
 import nltk
@@ -15,6 +12,7 @@ nltk.download('stopwords')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 
+# custom stopwords
 STOPWORDS = {'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd",
              'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers',
              'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which',
@@ -33,7 +31,9 @@ STOPWORDS = {'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you',
 
 
 class PreProcessingPipeline:
-
+    """
+    This class is responsible for preprocessing the data
+    """
     def __init__(self, conn):
         self.conn = conn
         self.db_cursor = self.conn.mydb.cursor()
@@ -48,11 +48,21 @@ class PreProcessingPipeline:
         return token_obj.tokenize(input_string)
 
     def read_data(self, table_name: str):
+        """
+        Get all data for a table and init preprocess
+        :param table_name: string :: table name
+        :return: None
+        """
         sql_query = f"Select * from {table_name};"
         self.db_cursor.execute(sql_query)
         self.preprocess_data()
 
     def remove_html_tags(self, text_list: List[str]):
+        """
+        This method is responsible for removing the HTML tags from the input data
+        :param text_list: Single line of text
+        :return: cleaned array without html tags
+        """
         text_string = ' '.join([str(text_list[i]) for i in range(len(text_list))])
 
         store = re.sub(r'<.*?>', ' ', text_string).split()
@@ -60,7 +70,11 @@ class PreProcessingPipeline:
         return store
 
     def remove_punctuations(self, text: List[str]):
-
+        """
+        This method is responsible for removing punctuations from words for each line of text
+        :param text: one line of text -> list
+        :return: list of words without punctuation
+        """
         tokenized_string = ' '.join([str(text[i]) for i in range(len(text))])
         #
         x = re.sub(r"['-?-!]", '', tokenized_string)
@@ -71,6 +85,11 @@ class PreProcessingPipeline:
         return x.split()
 
     def remove_stop_words(self, textList):
+        """
+        This method is responsible for removal of stop words
+        :param textList:
+        :return:
+        """
         new_list = []
         stop_words = set(stopwords.words('english'))
         for i in range(len(textList)):
@@ -80,6 +99,11 @@ class PreProcessingPipeline:
         return new_list
 
     def stemWords(self, textList):
+        """
+        This method is responsible for stemming words to their lemma
+        :param textList: a single string split into a list of words
+        :return: cleaned list of strings
+        """
         new_list = []
         tag = pos_tag(textList)
         for i in range(len(textList)):
@@ -127,13 +151,9 @@ class PreProcessingPipeline:
         for i in range(len(text_data)):
             raw_string = text_data[i]
             tokenized_list = self.tokenize_data(raw_string[0])
-
-            # test_list = ['chai', 'is', ':)', 'WHAT </br> !!! YO....']
             # Perform preprocessing
             update_emo_list = self.handle_emojis(tokenized_list)
-
             update_lower_case_list = self.to_lowerCase(update_emo_list)
-
             updated_html_tags = self.remove_html_tags(update_lower_case_list)
             tokenized_list = self.remove_punctuations(updated_html_tags)
             tokenized_list = self.stemWords(tokenized_list)
@@ -143,7 +163,6 @@ class PreProcessingPipeline:
 
             if len(token_store) == 10000:
                 x += 1
-                print("Commit id ", x)
                 self.conn.insert_row_pre_process_table(token_store)
                 self.conn.mydb.commit()
                 token_store = []

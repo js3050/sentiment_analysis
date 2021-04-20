@@ -5,18 +5,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.cluster import KMeans
 from sklearn.neighbors import KNeighborsClassifier
-from DataInsight import DataInsights
-
 from sklearn.cluster import DBSCAN
-
-import pandas as pd
-import gensim
-from gensim.models import Word2Vec
-import numpy as np
-
 import matplotlib.pyplot as plt
-from collections import defaultdict
-
+from DataInsight import DataInsights
 
 class MachineLearningModel:
     """
@@ -47,10 +38,14 @@ class MachineLearningModel:
         print("Classification Results = ", self.results)
 
     def DBSCAN(self):
+        """
+        This method runs DBScan clustering on the training dataset
+        :return: None
+        """
         model = DBSCAN(eps=40, min_samples=50)
         model.fit(self.trainingData)
         res = model.fit_predict(self.testingData)
-        print(metrics.accuracy_score(res, self.testLabels))
+        print("DB Scan Accuracy " , metrics.accuracy_score(res, self.testLabels))
 
 
     def __get_elbow(self):
@@ -71,7 +66,7 @@ class MachineLearningModel:
         plt.xlabel('k')
         plt.ylabel('Silhouette Score')
         plt.title('The Elbow Method showing the optimal k')
-        plt.savefig("outs\elbow.png")
+        plt.savefig("outs\elbow.pdf")
         plt.show()
 
     def Kmeans(self,original_test_data):
@@ -89,14 +84,14 @@ class MachineLearningModel:
         pred_dict = {}
         for i in range(cluster_count):
             pred_dict[i] = []
-        pred_one = []
-        pred_zero = []
-        #for i in range(len(res)):
-        #    pred_dict[res[i]].append(original_test_data.iloc[i])
 
-        #datas_obj = DataInsights()
-        #for i in range(len(pred_dict.keys())):
-        #    datas_obj._gen_cloud(pred_dict.get(i), f"outs\{pred_dict.keys()[i]}.png")
+        for i in range(len(res)):
+           pred_dict[res[i]].append(original_test_data.iloc[i])
+
+        datas_obj = DataInsights()
+        for i in range(len(pred_dict.keys())):
+            if len(pred_dict.get(i)) > 0 :
+                datas_obj._gen_cloud(pred_dict.get(i), f"outs/kmeans_{i}.png")
 
 
         print(metrics.accuracy_score(res, self.testLabels))

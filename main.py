@@ -3,8 +3,20 @@ from DataGobbler import DataGobbler
 from PreProcessingPipeline import PreProcessingPipeline
 from SentimentAnalyzer import SentimentAnalyzer
 
+__authors__ = [
+    {
+        "name": "Jagwant Sehgal",
+        "email": "js3050@rit.edu"
+    },
+    {
+        "name" :"Chaitanya Mehta",
+        "email": "cm9020@rit.edu"
+    }
+]
+
 if __name__ == '__main__':
-    run_everything = False
+    # toggles database generation and dump. Set to false to skip data dump and processing and directly generate analysis
+    run_everything = True
     connector = DatabaseConnector(
         host="localhost",
         user="root",
