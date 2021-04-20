@@ -4,14 +4,14 @@ from DatabaseConnection import DatabaseConnector
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import wordnet
 from nltk import pos_tag
-
+from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 import json
 import string
 from typing import List
 import spacy
 import nltk
-
+nltk.download('stopwords')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 
@@ -72,9 +72,9 @@ class PreProcessingPipeline:
 
     def remove_stop_words(self, textList):
         new_list = []
-
+        stop_words = set(stopwords.words('english'))
         for i in range(len(textList)):
-            if textList[i] not in STOPWORDS:
+            if textList[i] not in STOPWORDS and textList[i] not in stop_words:
                 new_list.append(textList[i])
 
         return new_list
@@ -131,11 +131,13 @@ class PreProcessingPipeline:
             # test_list = ['chai', 'is', ':)', 'WHAT </br> !!! YO....']
             # Perform preprocessing
             update_emo_list = self.handle_emojis(tokenized_list)
+
             update_lower_case_list = self.to_lowerCase(update_emo_list)
+
             updated_html_tags = self.remove_html_tags(update_lower_case_list)
             tokenized_list = self.remove_punctuations(updated_html_tags)
-            tokenized_list = self.remove_stop_words(tokenized_list)
             tokenized_list = self.stemWords(tokenized_list)
+            tokenized_list = self.remove_stop_words(tokenized_list)
             json_tokenized_string = json.dumps(tokenized_list)
             token_store.append([json_tokenized_string, raw_string[1]])
 
