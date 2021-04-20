@@ -5,6 +5,9 @@ from wordcloud import WordCloud, STOPWORDS
 
 
 class DataInsights:
+    """
+    This class is a wrapper to generate and get better insights from the data through generation of graphs
+    """
     db = None
     cursor = None
 
@@ -13,6 +16,11 @@ class DataInsights:
         self.cursor = self.db.cursor
 
     def generate_counts_plot(self):
+        """
+        This method generates the counts for each sentiment . This is used to understand the data better.
+        Internal use only.
+        :return: None
+        """
         sql_query = "SELECT sentiment, count(sentiment) from sentiment_store.data_dump group by sentiment;"
 
         self.cursor.execute(sql_query)
@@ -31,7 +39,12 @@ class DataInsights:
         plt.savefig("Data_distribution.png")
 
     def generate_word_cloud(self):
-        print("Generating word cloud")
+        """
+        This method generates a word cloud for the data stored in the database by splitting the entire database dump.
+        Only for internal use
+        :return: None
+        """
+
         sql_query_pos = "SELECT review from sentiment_store.preprocesstable where sentiment='positive'"
         sql_query_neg = "SELECT review from sentiment_store.preprocesstable where sentiment='negative'"
         self.cursor.execute(sql_query_pos)
@@ -46,6 +59,12 @@ class DataInsights:
 
 
     def _gen_cloud(self, data, file_name="wordcloud.png"):
+        """
+        Generates a word cloud for the data and stores it in file
+        :param data: input data
+        :param file_name: output file
+        :return: None
+        """
         wordstring = ""
         for each_string in data:
             for each_word in each_string:
