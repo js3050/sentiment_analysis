@@ -9,7 +9,7 @@ class DataInsights:
     cursor = None
 
     def __init__(self):
-        self.db = DatabaseConnector("localhost", "root", "root", "sentiment_store")
+        self.db = DatabaseConnector("localhost", "root", "", "sentiment_store")
         self.cursor = self.db.cursor
 
     def generate_counts_plot(self):
@@ -45,7 +45,7 @@ class DataInsights:
 
 
 
-    def _gen_cloud(self, data):
+    def _gen_cloud(self, data, file_name="wordcloud.png"):
         wordstring = ""
         for each_string in data:
             for each_word in each_string:
@@ -59,7 +59,7 @@ class DataInsights:
         plt.tight_layout(pad=0)
 
         plt.show()
-        plt.savefig("wordcloud.png")
+        plt.savefig(file_name)
 
 
 if __name__ == '__main__':

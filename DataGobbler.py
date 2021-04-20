@@ -3,6 +3,9 @@ import os
 import pandas as pd
 
 class DataGobbler:
+    """
+    This class is responsible for reading the input datasets and dumping the same into the MySQL database
+    """
     db_cursor = None
     batch_size = 100
 
@@ -13,6 +16,10 @@ class DataGobbler:
         self.batch_size = 100
 
     def start(self):
+        """
+        Starting point
+        :return: None
+        """
         # imdb
         self.read_data_from_file_imdb()
         # rotten tomatoes
@@ -21,6 +28,10 @@ class DataGobbler:
         self.commit_to_db()
 
     def read_data_from_file_imdb(self):
+        """
+        This method reads data from the various files in the imdb dataset
+        :return: None
+        """
         positive_path = "aclImdb/train/pos/"
         negative_path = "aclImdb/train/neg/"
         positive_files = os.listdir(positive_path)
@@ -29,6 +40,10 @@ class DataGobbler:
         self._write_batch(negative_files, negative_path, "negative")
 
     def read_data_from_file_rt(self):
+        """
+        This method reads the rotten tomatoes review csv and converts it to rows on the MySQL Dump
+        :return:
+        """
         data = pd.read_csv("rotten_tomatoes_reviews.csv")
         #selecting only the first 100,000 rows
         data = data.iloc[:100000, :]
@@ -46,6 +61,13 @@ class DataGobbler:
         self.write_data(data_list)
 
     def _write_batch(self, file_listing, path, label):
+        """
+        This method is responsible for writing data in batches to the mysql database for each file in IMDB dataset
+        :param file_listing: list of filenames to read
+        :param path: path of files
+        :param label: positive / negative
+        :return:
+        """
         data = []
         start_index = 0
         batch_number = 1
@@ -65,13 +87,20 @@ class DataGobbler:
             print("Batch written", batch_number)
 
     def write_data(self, data_list):
-
+        """
+        This is a helper method used to execute multiple insert queries into the mysql database
+        :param data_list: List of elements to dump
+        :return: None
+        """
         sql_query = "INSERT INTO data_dump (review, sentiment) VALUES(%s, %s);"
         self.db_cursor.executemany(sql_query, data_list)
 
-        print("complete")
 
     def commit_to_db(self):
+        """
+        Helper method to commit write to db
+        :return: None
+        """
         self.db.commit()
 
 
